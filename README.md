@@ -1,4 +1,8 @@
-# Reactive-Reinforcement-learning
+# On Simple Reactive Neural Networks for Behaviour-Based Reinforcement Learning
+
+**[Ameya Pore](https://github.com/Ameyapores) and [Gerardo Aragon-Camarasa](https://github.com/gerac83)**
+
+## Introduction
 
 A framework to generate reactive behaviours, motivated from Subsumption architecture from 1980s. In our archihtecture each  behaviour is represented as a separate module (Deep network), having direct access to processed sensory information. Each module has an individual specific goal. We use a trivial form of imitation learning, called Behaviour cloning, to train these distinct behaviour layers.
 
