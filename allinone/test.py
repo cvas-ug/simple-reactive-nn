@@ -13,7 +13,7 @@ import random
 import torch.nn as nn
 
 
-SAVEPATH1 = os.getcwd() + '/actor_params.pth'
+SAVEPATH1 = os.getcwd() + '/train/actor_params.pth'
 
 env = gym.make("FetchPickAndPlace-v1")
 env2 = gym.wrappers.FlattenDictWrapper(env, dict_keys=['observation', 'desired_goal'])
@@ -73,7 +73,7 @@ while ep_numb < max_eps:
     timeStep = 0 #count the total number of timesteps
     state_inp = torch.from_numpy(env2.observation(lastObs)).type(FloatTensor)
     Ratio=[]
-    while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
+    while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
         #env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor, ratio = act(state_inp, model, True, False)       
@@ -103,7 +103,7 @@ while ep_numb < max_eps:
             action[i] = act_tensor[i].cpu().detach().numpy()
         
         action[3]= -0.01 
-        action[5] = act_tensor[3].cpu().detach().numpy()
+        #action[5] = act_tensor[3].cpu().detach().numpy()
         obsDataNew, reward, done, info = env.step(action)
         timeStep += 1
 
