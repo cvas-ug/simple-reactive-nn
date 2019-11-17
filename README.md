@@ -26,29 +26,30 @@ git clone https://github.com/Ameyapores/Reactive-Reinforcement-learning
 cd Reactive-Reinforcement-learning
 ```
 ### Step 1: Train on approach
+Create a folder, named 'train' in the approach directory where the weights would be saved. 
 ```
 cd approach
 python main.py
 ```
-After 2000 episodes of training, stop.
-Create a folder where the weights would be saved
+After 2000 episodes of training, stop (Ctrl+c)
+
 ### Step 2: Train on manipulate
-For manipulate, we consider four degrees of freedom: x, y, z and rotation.
-Transfer the saved weights from the approach folder to the folder where manipulate weights would be saved.
+Transfer the saved weights from the approach folder to the folder where manipulate weights would be saved. We have a created a folder named 'train' in the manipulate directory.
 ```
 cd manipulate
 python main.py
 ```
 After 1000 episodes of training, stop.
 ### Step 2: Train on retract
-Transfer the saved weights from the manipulate folder to the folder where retarct weights would be saved.
+Transfer the saved weights from the manipulate folder to the folder where retarct weights would be saved. We have created a folder named 'train' in the retract directory.
 ```
 cd retract
 python main.py
 ```
 After 2000 episodes of training, stop.
+
 ### Step 2: Train of chereographing the actions using LSTM
-Transfer the saved weights from the retract folder to the folder where LSTM weights would be saved.
+Transfer the saved weights from the retract folder to a new folder in the LSTM directory (named save). Also, create a seperate folder named train to save the weights of the Actor-critic. 
 ```
 cd LSTM
 python main3.py
