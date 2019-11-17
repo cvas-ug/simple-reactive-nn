@@ -31,7 +31,7 @@ Create a folder, named 'train' in the approach directory where the weights would
 cd approach
 python main.py
 ```
-After 2000 episodes of training, stop (Ctrl+c)
+After 2500 episodes of training, stop (Ctrl+c)
 
 ### Step 2: Train on manipulate
 Transfer the saved weights from the approach folder to the folder where manipulate weights would be saved. We have a created a folder named 'train' in the manipulate directory.
@@ -39,14 +39,14 @@ Transfer the saved weights from the approach folder to the folder where manipula
 cd manipulate
 python main.py
 ```
-After 1000 episodes of training, stop.
+After 2000 episodes of training, stop.
 ### Step 2: Train on retract
 Transfer the saved weights from the manipulate folder to the folder where retarct weights would be saved. We have created a folder named 'train' in the retract directory.
 ```
 cd retract
 python main.py
 ```
-After 2000 episodes of training, stop.
+After 3000 episodes of training, stop.
 
 ### Step 2: Train of chereographing the actions using LSTM
 Transfer the saved weights from the retract folder to a new folder in the LSTM directory (named save). Also, create a seperate folder named train to save the weights of the Actor-critic. 
@@ -54,7 +54,7 @@ Transfer the saved weights from the retract folder to a new folder in the LSTM d
 cd LSTM
 python main3.py
 ```
-After 3000 episodes of training, stop.
+After 2000 episodes of training, stop.
 ## Results
 <img align="center" src="images/fetch_rotate.gif" width="600"> 
 
