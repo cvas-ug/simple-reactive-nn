@@ -72,7 +72,7 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
         
         criterion = nn.MSELoss()
         
-        while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
+        while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
             action = [0, 0, 0, 0, 0, 0]
             object_oriented_goal = object_rel_pos.copy()
             object_oriented_goal[2] += 0.03
@@ -94,7 +94,7 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
                 action[i] = object_rel_pos[i]*6
 
             action[3] = -0.01
-            action[5] = obsDataNew['quat'][0]/6
+            #action[5] = obsDataNew['quat'][0]/6
             obsDataNew, reward, done, info = env.step(action)
             timeStep += 1
 
@@ -119,9 +119,9 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
             action[3]= -0.01
             obsDataNew, reward, done, info = env.step(action)
             timeStep += 1
-            state_inp = torch.from_numpy(env2.observation(obsDataNew)).type(FloatTensor)
             objectPos = obsDataNew['observation'][3:6]
             object_rel_pos = obsDataNew['observation'][6:9]
+            state_inp = torch.from_numpy(env2.observation(obsDataNew)).type(FloatTensor)
         
         while True: #limit the number of timesteps in the episode to a fixed duration
             
@@ -147,7 +147,7 @@ def test(rank, args, shared_model, counter):
         model.cuda()
     model.eval()
     done = True       
-    success = 0
+    
 
     savefile = os.getcwd() + '/train/mario_curves.csv'
     title = ['No. episodes', 'No. of success']
@@ -160,6 +160,7 @@ def test(rank, args, shared_model, counter):
         model.load_state_dict(shared_model.state_dict())
         ep_num = 0
         num_ep = counter.value
+        success = 0
         while ep_num < 100:
             ep_num +=1            
             lastObs = env.reset()
@@ -171,8 +172,8 @@ def test(rank, args, shared_model, counter):
             timeStep = 0
             model.load_state_dict(shared_model.state_dict())
             #Ratio, first_step =[], [] 
-            while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
-                #env.render()
+            while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
+                ##env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 object_oriented_goal = object_rel_pos.copy()
                 object_oriented_goal[2] += 0.03
@@ -189,11 +190,11 @@ def test(rank, args, shared_model, counter):
                 object_rel_pos = obsDataNew['observation'][6:9]
 
             while np.linalg.norm(object_rel_pos) >= 0.005 and timeStep <= env._max_episode_steps :
-                #env.render()
+                ##env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 for i in range(len(object_rel_pos)):
                     action[i] = object_rel_pos[i]*6
-                action[5] = obsDataNew['quat'][0]/6
+                #action[5] = obsDataNew['quat'][0]/6
                 action[3] = -0.01
 
                 obsDataNew, reward, done, info = env.step(action)
@@ -205,7 +206,7 @@ def test(rank, args, shared_model, counter):
             state_inp = torch.from_numpy(env2.observation(obsDataNew)).type(FloatTensor)            
             while np.linalg.norm(goal - objectPos) >= 0.01 and timeStep <= env._max_episode_steps :
             
-                #env.render()
+                ##env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 act_tensor, ratio = act(state_inp, model, False, True)   
                 #Ratio.append(ratio.cpu().detach().numpy())
@@ -220,7 +221,7 @@ def test(rank, args, shared_model, counter):
                 if timeStep >= env._max_episode_steps: break
             
             while True: #limit the number of timesteps in the episode to a fixed duration
-                #env.render()
+                ##env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 action[3] = -0.01 # keep the gripper closed
 
