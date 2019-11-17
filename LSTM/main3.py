@@ -14,7 +14,7 @@ import os
 import random
 from shared_adam import SharedAdam
 import torch.nn as nn
-from no_rewards import train, test
+from dense_reward import train, test
 
 SAVEPATH1 = os.getcwd() + '/train/actor_params.pth'
 SAVEPATH2 = os.getcwd() + '/save/actor_params.pth'
