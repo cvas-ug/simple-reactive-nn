@@ -67,7 +67,7 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
         state_inp = torch.from_numpy(env2.observation(lastObs)).type(FloatTensor)
         criterion = nn.MSELoss()
         
-        while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
+        while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
             
             action = [0, 0, 0, 0, 0, 0]
             error = torch.zeros(3).type(FloatTensor) 
@@ -100,7 +100,7 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
             for i in range(len(object_rel_pos)):
                 action[i] = object_rel_pos[i]*6
 
-            action[5] = obsDataNew['quat'][0]/6
+            #action[5] = obsDataNew['quat'][0]/6
             action[3] = -0.01
 
             obsDataNew, reward, done, info = env.step(action)
@@ -148,7 +148,7 @@ def test(rank, args, shared_model, counter):
         model.cuda()
     model.eval()
     done = True       
-    success = 0
+    
 
     savefile = os.getcwd() + '/train/mario_curves.csv'
     title = ['No. episodes', 'No. of success']
@@ -160,6 +160,7 @@ def test(rank, args, shared_model, counter):
         model.load_state_dict(shared_model.state_dict())
         ep_num = 0
         num_ep = counter.value
+        success = 0
         while ep_num < 100:
             ep_num +=1            
             lastObs = env.reset()
@@ -172,7 +173,7 @@ def test(rank, args, shared_model, counter):
             state_inp = torch.from_numpy(env2.observation(lastObs)).type(FloatTensor)
             model.load_state_dict(shared_model.state_dict())
             Ratio, first_step =[], []
-            while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
+            while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
                 action = [0, 0, 0, 0, 0, 0]
 
                 act_tensor, ratio = act(state_inp, model, True, False)       
@@ -199,7 +200,7 @@ def test(rank, args, shared_model, counter):
                 for i in range(len(object_rel_pos)):
                     action[i] = object_rel_pos[i]*6
 
-                action[5] = obsDataNew['quat'][0]/6
+                #action[5] = obsDataNew['quat'][0]/6
                 action[3] = -0.01
 
                 obsDataNew, reward, done, info = env.step(action)
