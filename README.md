@@ -20,7 +20,7 @@ The primary goal of picking the object is subdivided into simpler subtasks. For 
 Here, we use the OpenAI simulator FetchPickandPlace which provides kinematic state vector as an input to our network.
 For installing OpenAI fetch simulator: Refer to [Fetch](https://openai.com/blog/ingredients-for-robotics-research/)
 
-Since, we are adding an additional degree of freedom (i.e rotation of the end-effector while grasping), that is not provided by the fetchpickandplace environment, we need to change the files associated with the fetchpickandplace environment.  
+Since, we are adding an additional degree of freedom (i.e rotation of the end-effector while grasping), that is not provided by the fetchpickandplace environment, we need to change the files associated with the fetchpickandplace environment. Replace the robotics folder in gym/envs/robotics by the one in this repository. Tehn, you are all set!  
 ### Clone the repository
 
 ```
@@ -51,7 +51,7 @@ python main.py
 After 3000 episodes of training, stop.
 
 ### Step 2: Train of chereographing the actions using LSTM
-Transfer the saved weights from the retract folder to a new folder in the LSTM directory (named save). Also, create a seperate folder named train to save the weights of the Actor-critic. 
+Transfer the saved weights from the retract folder to a new folder in the LSTM directory (named weight). Also, create a seperate folder named train to save the weights of the Actor-critic. 
 ```
 cd LSTM
 python main3.py
