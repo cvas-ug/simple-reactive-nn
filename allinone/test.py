@@ -74,7 +74,7 @@ while ep_numb < max_eps:
     state_inp = torch.from_numpy(env2.observation(lastObs)).type(FloatTensor)
     Ratio=[]
     while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor, ratio = act(state_inp, model, True, False)       
         #print(act_tensor)     
@@ -95,7 +95,7 @@ while ep_numb < max_eps:
         if timeStep >= env._max_episode_steps: break
     
     while np.linalg.norm(object_rel_pos) >= 0.005 and timeStep <= env._max_episode_steps :
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor, ratio = act(state_inp, model, False, False)    
         Ratio.append(ratio.cpu().detach().numpy())
@@ -103,7 +103,7 @@ while ep_numb < max_eps:
             action[i] = act_tensor[i].cpu().detach().numpy()
         
         action[3]= -0.01 
-        #action[5] = act_tensor[3].cpu().detach().numpy()
+        action[5] = act_tensor[3].cpu().detach().numpy()
         obsDataNew, reward, done, info = env.step(action)
         timeStep += 1
 
@@ -114,7 +114,7 @@ while ep_numb < max_eps:
 
     while np.linalg.norm(goal - objectPos) >= 0.01 and timeStep <= env._max_episode_steps :
             
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor, ratio = act(state_inp, model, False, True)    
         Ratio.append(ratio.cpu().detach().numpy())
@@ -131,7 +131,7 @@ while ep_numb < max_eps:
         if timeStep >= env._max_episode_steps: break
     
     while True: #limit the number of timesteps in the episode to a fixed duration
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         action[3] = -0.01 # keep the gripper closed
 
