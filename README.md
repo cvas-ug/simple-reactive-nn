@@ -19,6 +19,8 @@ The primary goal of picking the object is subdivided into simpler subtasks. For 
 - mujoco physics engine
 Here, we use the OpenAI simulator FetchPickandPlace which provides kinematic state vector as an input to our network.
 For installing OpenAI fetch simulator: Refer to [Fetch](https://openai.com/blog/ingredients-for-robotics-research/)
+
+Since, we are adding an additional degree of freedom (i.e rotation of the end-effector while grasping), that is not provided by the fetchpickandplace environment, we need to change the files associated with the fetchpickandplace environment.  
 ### Clone the repository
 
 ```
