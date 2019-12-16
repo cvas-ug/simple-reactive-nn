@@ -89,26 +89,32 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
         state_inp = torch.from_numpy(env2.observation(obsDataNew)).type(FloatTensor)
 
         while np.linalg.norm(object_rel_pos) >= 0.005 and timeStep <= env._max_episode_steps :
-           
+            error = torch.zeros(3).type(FloatTensor) 
             action = [0, 0, 0, 0, 0, 0]
             act_tensor, _ = act(state_inp, model, False, False) 
             
-            for i in range(len(object_rel_pos)):
-                optimizer.zero_grad()
+            for i in range(3): 
                 expected = torch.from_numpy(np.array(object_rel_pos[i]*6)).type(FloatTensor)
                 action[i] = act_tensor[i].cpu().detach().numpy()
-                error = criterion(act_tensor[i], expected)
-                (error).backward(retain_graph=True)
-                ensure_shared_grads(model, shared_model)
-                optimizer.step()
-                #action[i] = object_rel_pos[i]*6
+                #error = criterion(act_tensor[i], expected)
+                error[i] = criterion(act_tensor[i], expected)
+            
+            action[4] = act_tensor[3].cpu().detach().numpy()
+            error2= criterion(act_tensor[3], torch.from_numpy(np.array(obsDataNew['observation'][13]/8)).type(FloatTensor))
 
-            '''optimizer.zero_grad()
-            #action[5] = act_tensor[3].cpu().detach().numpy()
-            #error2= criterion(act_tensor[3], torch.from_numpy(np.array(obsDataNew['quat'][0]/6)).type(FloatTensor))
+            optimizer.zero_grad()
+            loss = torch.sum(error)
+            loss.backward(retain_graph=True)
+            
+            #ensure_shared_grads(model, shared_model)
+            #optimizer.step()
+            #action[i] = object_rel_pos[i]*6
+
+            #optimizer.zero_grad()
+            
             (error2).backward(retain_graph=True)
             ensure_shared_grads(model, shared_model)
-            optimizer.step()'''
+            optimizer.step()
             action[3]= -0.01 
             obsDataNew, reward, done, info = env.step(action)
             timeStep += 1
@@ -207,8 +213,8 @@ def test(rank, args, shared_model, counter):
                 for i in range(len(object_oriented_goal)):
                     action[i] = act_tensor[i].cpu().detach().numpy()
                     #action[i] = object_rel_pos[i]*6
-                #action[5] = act_tensor[3].cpu().detach().numpy()
-                action[3]= -0.01 
+                action[4] = act_tensor[3].cpu().detach().numpy()
+                action[3]= -0.02 
                 obsDataNew, reward, done, info = env.step(action)
                 timeStep += 1
 
