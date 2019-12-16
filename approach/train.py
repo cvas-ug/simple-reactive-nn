@@ -100,8 +100,8 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
             for i in range(len(object_rel_pos)):
                 action[i] = object_rel_pos[i]*6
 
-            #action[5] = obsDataNew['quat'][0]/6
-            action[3] = -0.01
+            action[4] = obsDataNew['observation'][13]/6
+            action[3] = -0.02
 
             obsDataNew, reward, done, info = env.step(action)
             timeStep += 1
@@ -200,8 +200,8 @@ def test(rank, args, shared_model, counter):
                 for i in range(len(object_rel_pos)):
                     action[i] = object_rel_pos[i]*6
 
-                #action[5] = obsDataNew['quat'][0]/6
-                action[3] = -0.01
+                action[4] = obsDataNew['observation'][13]/8
+                action[3] = -0.02
 
                 obsDataNew, reward, done, info = env.step(action)
                 timeStep += 1
