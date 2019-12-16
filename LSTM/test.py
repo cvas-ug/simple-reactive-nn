@@ -14,7 +14,8 @@ import torch.nn as nn
 
 
 SAVEPATH1 = os.getcwd() + '/train/actor_params.pth'
-SAVEPATH2 = os.getcwd() + '/save/actor_params.pth'
+#SAVEPATH2 = os.getcwd() + '/train/saved_weights.pth'
+SAVEPATH2 = os.getcwd() + '/weights/actor_params.pth'
 
 env = gym.make("FetchPickAndPlace-v1")
 env2 = gym.wrappers.FlattenDictWrapper(env, dict_keys=['observation', 'desired_goal'])
@@ -96,14 +97,14 @@ while ep_numb < max_eps:
     
     act_model = prob.max(-1, keepdim=True)[1].data
     
-    action_out = act_model.to(torch.device("cpu"))
-
+    #action_out = act_model.to(torch.device("cpu"))
+    action_out = torch.tensor([[1]])
     while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor= act(state_inp, action_out, model2)      
         #print(act_tensor)     
-        for i in range(len(object_oriented_goal)):
+        for i in range(3):
             action[i] = act_tensor[i].cpu().detach().numpy()
 
         object_oriented_goal = object_rel_pos.copy()            
@@ -120,10 +121,10 @@ while ep_numb < max_eps:
     value, y, (hx, cx) = model(state_inp, hx, cx)
     prob = F.softmax(y)
     act_model = prob.max(-1, keepdim=True)[1].data
-    action_out = act_model.to(torch.device("cpu"))
-
+    #action_out = act_model.to(torch.device("cpu"))
+    action_out = torch.tensor([[0]])
     while np.linalg.norm(object_rel_pos) >= 0.005 and timeStep <= env._max_episode_steps :
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor= act(state_inp, action_out, model2)   
 
@@ -145,11 +146,11 @@ while ep_numb < max_eps:
     value, y, (hx, cx) = model(state_inp, hx, cx)
     prob = F.softmax(y)
     act_model = prob.max(-1, keepdim=True)[1].data
-    action_out = act_model.to(torch.device("cpu"))
-
+    #action_out = act_model.to(torch.device("cpu"))
+    action_out = torch.tensor([[2]])
     while np.linalg.norm(goal - objectPos) >= 0.01 and timeStep <= env._max_episode_steps :
             
-        #env.render()
+        env.render()
         action = [0, 0, 0, 0, 0, 0]
         act_tensor= act(state_inp, action_out, model2)
 

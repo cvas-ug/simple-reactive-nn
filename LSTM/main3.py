@@ -17,7 +17,7 @@ import torch.nn as nn
 from dense_reward import train, test
 
 SAVEPATH1 = os.getcwd() + '/train/actor_params.pth'
-SAVEPATH2 = os.getcwd() + '/save/actor_params.pth'
+SAVEPATH2 = os.getcwd() + '/weights/actor_params.pth'
 
 parser = argparse.ArgumentParser(description='A3C')
 parser.add_argument('--use-cuda',default=True,
@@ -34,7 +34,7 @@ parser.add_argument('--max-eps', type=float, default=10000,
                     help='max number of episodes (default: 10000)')
 parser.add_argument('--max-steps', type=float, default=50,
                     help='max number of steps per episode (default: 50)')
-parser.add_argument('--num-processes', type=int, default=4,
+parser.add_argument('--num-processes', type=int, default=2,
                     help='how many training processes to use (default: 4)')
 parser.add_argument('--save-interval', type=int, default=50,
                     help='model save interval (default: 10)')
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     lock = mp.Lock()
     print (counter)
     p = mp.Process(target=test, args=(args.num_processes, args, shared_model, counter))
+
 
     p.start()
     processes.append(p)

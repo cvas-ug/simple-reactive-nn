@@ -96,10 +96,8 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
         entropy = -(log_prob * prob).sum(-1, keepdim=True)
         log_prob = log_prob.gather(-1, Variable(act_model))
         action_out = act_model.to(torch.device("cpu"))
-        #print(action_out)
         entropies.append(entropy), log_probs.append(log_prob), values.append(value)
-
-        while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
+        while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
             #env.render()
             action = [0, 0, 0, 0, 0, 0]
             act_tensor= act(state_inp, action_out, model2)      
@@ -129,7 +127,6 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
         log_prob = log_prob.gather(-1, Variable(act_model))
         action_out = act_model.to(torch.device("cpu"))
         entropies.append(entropy), log_probs.append(log_prob), values.append(value)
-        #print("second action", action_out)
         
         while np.linalg.norm(object_rel_pos) >= 0.005 and timeStep <= env._max_episode_steps :
             #env.render()
@@ -140,8 +137,8 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
                 action[i] = act_tensor[i].cpu().detach().numpy()
             
             action[3]= -0.01 
-            '''if action_out == 0:
-                action[5] = act_tensor[3].cpu().detach().numpy()'''
+            if action_out == 0:
+                action[4] = act_tensor[3].cpu().detach().numpy()
             
             obsDataNew, reward, done, info = env.step(action)
             timeStep += 1
@@ -163,8 +160,6 @@ def train(rank, args, shared_model, counter, lock, optimizer=None):
         log_prob = log_prob.gather(-1, Variable(act_model))
         action_out = act_model.to(torch.device("cpu"))
         entropies.append(entropy), log_probs.append(log_prob), values.append(value)
-        #print("third action", action_out)
-
         while np.linalg.norm(goal - objectPos) >= 0.01 and timeStep <= env._max_episode_steps :
             
             #env.render()
@@ -243,7 +238,7 @@ def test(rank, args, shared_model, counter):
         model2.cuda()
 
     done = True       
-    success = 0
+    
 
     savefile = os.getcwd() + '/train/mario_curves.csv'
     title = ['No. episodes', 'No. of success']
@@ -289,7 +284,7 @@ def test(rank, args, shared_model, counter):
             act_model = prob.max(-1, keepdim=True)[1].data
             action_out = act_model.to(torch.device("cpu"))
             
-            while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
+            while np.linalg.norm(object_oriented_goal) >= 0.01 and timeStep <= env._max_episode_steps:
                 #env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 act_tensor= act(state_inp, action_out, model2)      
@@ -323,8 +318,8 @@ def test(rank, args, shared_model, counter):
                     action[i] = act_tensor[i].cpu().detach().numpy()
                 
                 action[3]= -0.01 
-                '''if action_out ==0:
-                    action[5] = act_tensor[3].cpu().detach().numpy()'''
+                if action_out ==0:
+                    action[4] = act_tensor[3].cpu().detach().numpy()
                 
                 obsDataNew, reward, done, info = env.step(action)
                 timeStep += 1
