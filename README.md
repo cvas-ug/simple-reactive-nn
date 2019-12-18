@@ -14,7 +14,7 @@ The primary goal of picking the object is subdivided into simpler subtasks. For 
 ## Implementation details
 ### Prerequisites
 - Python3.5+
-- PyTorch 0.4.0
+- PyTorch 1.3.1
 - OpenAI Gym ==0.10.8
 - mujoco physics engine
 Here, we use the OpenAI simulator FetchPickandPlace which provides kinematic state vector as an input to our network.
