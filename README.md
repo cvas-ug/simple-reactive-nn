@@ -51,7 +51,7 @@ python main.py
 After 3000 episodes of training, stop.
 
 ### Step 2: Train of chereographing the actions using LSTM
-Transfer the saved weights from the retract folder to a new folder in the LSTM directory (named weight). Also, create a seperate folder named train to save the weights of the Actor-critic. 
+Transfer the saved weights from the retract folder to a new folder in the LSTM directory (named weights). Also, create a seperate folder named 'train' to save the weights of the Actor-critic. Transfer the saved weights from the retract folder to this 'train' folder. 
 ```
 cd LSTM
 python main3.py
