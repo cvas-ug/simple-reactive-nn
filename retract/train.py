@@ -181,7 +181,7 @@ def test(rank, args, shared_model, counter):
             model.load_state_dict(shared_model.state_dict())
             #Ratio, first_step =[], [] 
             while np.linalg.norm(object_oriented_goal) >= 0.015 and timeStep <= env._max_episode_steps:
-                env.render()
+                #env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 object_oriented_goal = object_rel_pos.copy()
                 object_oriented_goal[2] += 0.03
@@ -198,7 +198,7 @@ def test(rank, args, shared_model, counter):
                 object_rel_pos = obsDataNew['observation'][6:9]
 
             while np.linalg.norm(object_rel_pos) >= 0.005 and timeStep <= env._max_episode_steps :
-                env.render()
+                #env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 for i in range(len(object_rel_pos)):
                     action[i] = object_rel_pos[i]*6
@@ -214,7 +214,7 @@ def test(rank, args, shared_model, counter):
             state_inp = torch.from_numpy(env2.observation(obsDataNew)).type(FloatTensor)            
             while np.linalg.norm(goal - objectPos) >= 0.01 and timeStep <= env._max_episode_steps :
             
-                env.render()
+                #env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 act_tensor, ratio = act(state_inp, model, False, True)   
                 #Ratio.append(ratio.cpu().detach().numpy())
@@ -230,7 +230,7 @@ def test(rank, args, shared_model, counter):
                 if timeStep >= env._max_episode_steps: break
             
             while True: #limit the number of timesteps in the episode to a fixed duration
-                env.render()
+                #env.render()
                 action = [0, 0, 0, 0, 0, 0]
                 action[3] = -0.01 # keep the gripper closed
 
